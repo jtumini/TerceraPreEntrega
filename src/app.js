@@ -6,14 +6,18 @@ import viewsRouter from './routers/views.router.js'
 import mongoose from 'mongoose' 
 import { Server } from 'socket.io'
 import session from 'express-session'
-import  FileStore  from 'session-file-store'
+import MongoStore from 'connect-mongo'
 
 const app = express ()
-const FileStore = FileStore(session)
 
 app.use(session({
-    store: new FileStore({
-        path: './sessions',
+    store: MongoStore.create({
+        mongoUrl: 'mongodb://localhost:27017',
+        dbName:'usuarios',
+        mongoOptions: {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }    
     }),
     secret: 'secretWord',
     resave: true,
@@ -22,7 +26,7 @@ app.use(session({
 
 app.get ('/user/profile', (req, res) => {
     const user = {  
-        username: 'juantumini' ,
+        username: req.session.user.username ,
         ui_preference: 'dark',
         language: 'es',
         location: 'ar'
@@ -34,7 +38,7 @@ app.get ('/user/profile', (req, res) => {
 
 
 app.get('/user/getpreference',(req, res)=>{
-    res.send(req.session.user.location)
+    res.send(req.session.user.username)
 })
 
 app.get('/user/deletepreference',(req, res)=>{
@@ -56,9 +60,22 @@ app.use('/api/products' , productsRouter)
 app.use('/products' , viewsRouter)
 app.use('/api/carts', cartsRouter)
 
+const auth = (req, res, next) => {
+    if (req.session?.user && req.session.user.username === "juantumini") {
+        return next ()
+    }
+    return res.status(401).json({ status: 'fail' , message: 'auth error'})
+}
+
+app.get('/products', auth, (req, res) => {
+    res.render('products', {
+        username: 'juantumini'
+    })
+})
+
 mongoose.set('strictQuery',false)
 try {
-    await mongoose.connect('mongodb+srv://juantumini5:juantumini5@cluster0.7ascp7r.mongodb.net/')
+    await mongoose.connect('mongodb://localhost:27017')
 } catch (err){
     console.log('no se pudo conectar a la base')
 }

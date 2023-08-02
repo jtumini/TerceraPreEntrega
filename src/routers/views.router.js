@@ -10,12 +10,12 @@ router.get( '/' , async (req, res) => {
         let limit = parseInt(req.query.limit) || 5
         const product = await productsModel.paginate({}, { page, limit, lean: true  })
 
-        result.prevLink = result.hasPrevPage
-                        ? `/products?page=${result.prevPage}`
-                        : ''
-        result.nextLink = result.hasNextPage
-                        ? `/products?page=${result.nextPage}`
-                        : ''                
+        const prevLink = product.hasPrevPage
+            ? `/products?page=${product.prevPage}&limit=${limit}`
+            : '';
+        const nextLink = product.hasNextPage
+            ? `/products?page=${product.nextPage}&limit=${limit}`
+            : '';              
 
         res.render('home' , { product })
     } catch(err){

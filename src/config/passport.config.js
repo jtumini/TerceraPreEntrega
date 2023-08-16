@@ -1,9 +1,14 @@
 import passport from 'passport'
 import local from 'passport-local'
-import UserModel from '../dao/models/user.modelss.js'
-import { createHash, isValidPassword } from '../utils.js'
+import passport_jwt from "passport-jwt"
+import UserModel from '../dao/models/user.models.js'
+import { createHash, extractCookie, generateToken, isValidPassword, JWT_PRIVATE_KEY} from '../utils.js'
+import GitHubStrategy from 'passport-github2'
 
-const LocalStrategy = local.Strategy
+const JWTStrategy = passport_jwt.Strategy
+const ExtractJWT = passport_jwt.ExtractJwt
+
+const LocalStrategy = local.Strategy 
 
 const initializePassport = () => {
 
@@ -11,6 +16,7 @@ const initializePassport = () => {
         passReqToCallback: true,
         usernameField: 'email'
     }, async(req, username, password, done) => {
+
         const { first_name, last_name, email, age } = req.body
         try {
             const user = await UserModel.findOne({ email: username })
@@ -20,12 +26,12 @@ const initializePassport = () => {
             }
 
             const newUser = {
-                first_name, last_name, email, age, password: createHash(password)
+                first_name, last_name, email, age, password: createHash(password) , role: email === 'admin@gmail.com' ? 'admin' : 'user'
             }
             const result = await UserModel.create(newUser)
             return done(null, result)
         } catch(err) {
-            return done('error al obtener el user')
+            return done("error al obtener el user" + error)
         }
     }))
 
@@ -35,14 +41,26 @@ const initializePassport = () => {
         try {
             const user = await UserModel.findOne({ email: username })
             if (!user ) {
+                console.log("User dont exist");
                 return done(null, false)
             }
 
             if (!isValidPassword(user, password)) return done(null, false)
+            
+            const token = generateToken(user)
+            user.token = token
+            
             return done(null, user)
         } catch(err) {
 
         }
+    }))
+
+    passport.use ('jwt', new  JWTStrategy ({
+        jwtFromRequest: ExtractJWT.fromExtractors([extractCookie]),
+        secretOrKey: JWT_PRIVATE_KEY
+    }, async(jwt_payload, done)=>{
+        done(null, jwt_payload)
     }))
 
     passport.serializeUser((user, done) => {
@@ -56,4 +74,4 @@ const initializePassport = () => {
 
 }
 
-export default initializePassport
+export default initializePassport; 

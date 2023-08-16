@@ -4,7 +4,7 @@ import productsModel from '../dao/models/product.models.js'
 
 const router = Router ()
 
-router.get( '/' , async (req, res) => {
+router.get( "/" , async (req, res) => {
     try{    
         let page = parseInt(req.query.page) || 1
         let limit = parseInt(req.query.limit) || 5

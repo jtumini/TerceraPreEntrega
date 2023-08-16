@@ -1,11 +1,12 @@
 import { Router } from "express";
+import { JWT_COOKIE_NAME } from '../utils.js'
 import UserModel from "../dao/models/user.models.js";
 import { isValidPassword } from "../utils.js";
 import passport from "passport";
 
 const router = Router()
 
-//Vista para registrar usuarios
+
 router.get('/register', (req, res) => {
     res.render('sessions/register')
 })
@@ -18,31 +19,30 @@ router.post('/register', passport.authenticate('register', {
 })
 
 router.get('/failRegister', (req, res) => {
-    res.send({ error: 'Faileed!'})
+    res.send({ error: 'Failed!'})
 })
 
 // Vista de Login
 router.get('/login', (req, res) => {
-    res.render('sessions/login')
+    res.render('/session/login')
 })
 
 // API para login
 router.post('/login', passport.authenticate('login', { failureRedirect: '/session/failLogin'}), async (req, res) => {
-    res.redirect('/products')
+    if (!req.user) {
+        return res.status(400).send({ status: "error", error: "Invalid credentiales" })
+    }
+    res.cookie(JWT_COOKIE_NAME, req.user.token).redirect('/products')
+})
+router.get('/faillogin', (req, res) => {
+    res.send({error: "Fail Login"})
 })
 
-router.get('/failLogin', (req, res) => {
-    res.send({ error: 'Failed!'})
-})
+
 
 // Cerrar Session
 router.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if(err) {
-            console.log(err);
-            res.status(500).render('errors/base', {error: err})
-        } else res.redirect('/sessions/login')
-    })
+    res.clearCookie(JWT_COOKIE_NAME).redirect('/')
 })
 
 

@@ -10,21 +10,28 @@ import cookieParser from "cookie-parser";
 import initializePassport from "./config/passport.config.js";
 import run from "./run.js";
 
+
 const app = express ()
+const PORT = process.env.PORT || 8080
+app.listen(PORT, () => console.log(`Server Up on port ${PORT}`))
+
 
 app.use(express.static('./src/public'))
 app.use(express.json())
 app.use(cookieParser())
-app.use('/products' , viewsRouter)
-app.use('/api/carts', cartsRouter)
-app.use('/api/session', sessionRouter)
 app.use(express.urlencoded({extended: true}))
 app.use(express.static(__dirname + "/public"))
-
 app.engine ('handlebars' , handlebars.engine())
 
+
+app.use('/api/products', productsRouter)
+app.use('/api/carts', cartsRouter)
+app.use('/api/session', sessionRouter)
+app.use('/carts' , viewsRouter)
+app.use('/products' , viewsRouter)
+app.use('/chat' , viewsRouter)
+
 app.get ('/' , (req,res) => res.send('Servidor activo'))
-app.use('/api/products' , productsRouter)
 
 app.set("views" , __dirname + "/views" ) 
 app.set("view engine" , "handlebars")

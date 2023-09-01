@@ -1,9 +1,9 @@
-import productRouter from "./src/routers/products.router.js"
-import cartRouter from "./src/routers/cart.router.js"
-import chatRouter from "./src/routers/chat.router.js"
-import messagesModel from "./src/dao/models/message.models.js";
-import productViewsRouter from './src/routers/views.router.js'
-import sessionRouter from './src/routers/session.router.js'
+import productRouter from "./routers/products.router.js"
+import cartRouter from "./routers/cart.router.js"
+import chatRouter from "./routers/chat.router.js"
+import messagesModel from "./models/message.models.js";
+import productViewsRouter from './routers/views.router.js'
+import sessionRouter from './routers/session.router.js'
 import { passportCall, handlePolicies } from "./utils.js";
 
 

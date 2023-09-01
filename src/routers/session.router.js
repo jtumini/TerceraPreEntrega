@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { JWT_COOKIE_NAME } from '../utils.js'
-import UserModel from "../dao/models/user.models.js";
+import UserModel from "../models/user.models.js";
 import { isValidPassword } from "../utils.js";
 import passport from "passport";
 

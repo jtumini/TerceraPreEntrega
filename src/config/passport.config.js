@@ -1,7 +1,7 @@
 import passport from 'passport'
 import local from 'passport-local'
 import passport_jwt from "passport-jwt"
-import UserModel from '../dao/models/user.models.js'
+import UserModel from '../models/user.models.js'
 import { createHash, extractCookie, generateToken, isValidPassword, JWT_PRIVATE_KEY} from '../utils.js'
 import GitHubStrategy from 'passport-github2'
 

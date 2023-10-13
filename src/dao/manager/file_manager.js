@@ -62,22 +62,24 @@ class FileManager {
         obj.id = id
         const list = await this.read()
         for (let i = 0; i < list.length; i++) {
-          if (list[i].id == id){
-              list[i] = obj
-              await this.write(list) 
-              break
-          }
+        if (list[i].id == id){
+            list[i] = obj
+            break
         }
-      }
+        }
+        await this.write(list) 
+        return obj
+    }
 
-      updateIdx = async (id,obj) => {
+    updateIdx = async (id,obj) => {
         obj.id = id
         const list = await this.read()
         const idx = list.findIndex(e => e.id == id)
         if(idx < 0) return
         list[idx] = obj
         await this.write(list)
-      }
+        return obj
+    }
 }
 
 export default FileManager

@@ -43,8 +43,7 @@ class FileManager {
     }
     
     get = async () => {
-        const data = await this.read()
-        return data
+        await this.read()
     }
 
     add = async (obj) => {

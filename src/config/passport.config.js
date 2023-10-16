@@ -3,7 +3,6 @@ import local from 'passport-local'
 import passport_jwt from "passport-jwt"
 import UserModel from '../models/user.models.js'
 import { createHash, extractCookie, generateToken, isValidPassword, JWT_PRIVATE_KEY} from '../utils.js'
-import GitHubStrategy from 'passport-github2'
 
 const JWTStrategy = passport_jwt.Strategy
 const ExtractJWT = passport_jwt.ExtractJwt

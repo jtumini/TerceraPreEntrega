@@ -1,3 +1,7 @@
+import {User, Product} from './src/dao/factory'
+import UserRepository from './src/repositories/user.repository.js'
+import ProductRepository from './src/repositories/products.repository'
+
 const table = document.getElementById('productsTable')
 
 const socket = io() 
@@ -25,3 +29,8 @@ socket.on('updatedProducts', data => {
             table.getElementsByTagName('tbody')[0].appendChild(tr);
         }
 } )
+
+
+
+export const UserService = new UserRepository(new User())
+export const ProductService = new ProductRepository(new Product())

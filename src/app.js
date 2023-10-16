@@ -9,7 +9,8 @@ import passport from "passport";
 import cookieParser from "cookie-parser";
 import initializePassport from "./config/passport.config.js";
 import run from "./run.js";
-
+import router from './routers/users.router.js';
+import router from './routers/products.router.js';
 
 const app = express ()
 const PORT = process.env.PORT || 8080
@@ -25,6 +26,7 @@ app.engine ('handlebars' , handlebars.engine())
 
 
 app.use('/api/products', productsRouter)
+app.use('api/users', usersRouter )
 app.use('/api/carts', cartsRouter)
 app.use('/api/session', sessionRouter)
 app.use('/carts' , viewsRouter)

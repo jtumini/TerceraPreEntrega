@@ -11,11 +11,25 @@ import initializePassport from "./config/passport.config.js";
 import run from "./run.js";
 import router from './routers/users.router.js';
 import router from './routers/products.router.js';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express'
 
 const app = express ()
 const PORT = process.env.PORT || 8080
-app.listen(PORT, () => console.log(`Server Up on port ${PORT}`))
+app.listen(PORT, () => console.log(`Server Up on port ${PORT}`))   
 
+const swaggerOptions ={
+    definition:{
+        openapi: '3.0.1',
+        info: {
+            title: 'Documentacion de la API',
+            description: 'Aqui va la descripcion'
+        }
+    },
+    apis: ['./docs/**/*.yaml'] 
+}
+const specs = swaggerJSDoc(swaggerOptions)
+app.use('./docs', swaggerUiExpress.serve , swaggerUiExpress.setup(specs))
 
 app.use(express.static('./src/public'))
 app.use(express.json())

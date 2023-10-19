@@ -1,6 +1,6 @@
-import {User, Product} from './src/dao/factory'
-import UserRepository from './src/repositories/user.repository.js'
-import ProductRepository from './src/repositories/products.repository'
+import {User, Product} from './dao/factory'
+import UserRepository from './repositories/user.repository.js'
+import ProductRepository from './repositories/products.repository'
 
 const table = document.getElementById('productsTable')
 

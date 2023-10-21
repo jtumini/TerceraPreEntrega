@@ -1,0 +1,181 @@
+paths:
+  /products:
+    get:
+      tags:
+        -Products
+      summary: Get all products  
+      responses:
+        '200':
+          description: Succesfull operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '404':
+          description: product not found
+    post:
+      tags:
+        -Products
+      security:
+        -bearerAuth: []
+      summary: Create a new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  required: true
+                category:
+                  type: string
+                  required: true
+                description:
+                  type: string
+                price:
+                  type: number
+                  required: true
+                code:
+                  type: string
+                  required: true
+                status:
+                  type: Boolean
+                stock: 
+                  type: number
+                  required: true
+                thumbnails:
+                  type: [String]
+              required:
+                -title
+                -category
+                -price
+                -code
+                -stock
+      responses:
+      '200':
+        description: Succesful operation
+        content:
+          application/json:
+            schema:
+            $ref: '#components/schema/Product'        
+      '404':
+          description: product not found  
+
+  /productsid/{productId}:
+    get:
+      tag: 
+        - Products
+      summary: Get a product by ID
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: ID of the product
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: Succesful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '404':
+          description: product not found
+
+  /products/{pid}:
+    put:
+      tags:
+        - Products
+      summary: update a product by its ID
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID of the product
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                category:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+                code:
+                  type: string
+                status:
+                  type: boolean
+                stock:
+                  type: number
+                thumbnails:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Succesfull operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: product not found
+
+  /products/{pid}:
+    delete:
+      tags:
+        - Products
+      summary: delete a product by its ID
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID of the product
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Succesfull operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: product not found
+
+components:
+  schema:
+    Product:
+      type: object
+      properties:
+        title:  
+          type: string
+        category:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        Code:
+          type: string
+        status:
+          type: Boolean
+        stock: 
+          type: number
+        thumbnails:
+          type: [String]        

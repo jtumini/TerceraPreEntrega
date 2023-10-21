@@ -1,0 +1,114 @@
+paths:
+  /carts:
+    get:
+      tags:
+        - Carts
+      summary: Get all carts
+      responses:
+        '200':
+          description: Succesfull operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cart'
+
+    post:
+      tags:
+        - Carts
+      summary: Create a new Cart
+      responses:
+        '200':
+          description: Succesfull operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+
+  /carts/{id}:
+    get:
+      tags:
+        - Carts
+      summary: Get a cart by its ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Succesfull operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+
+  /carts/{cid}/product/{pid}:
+    post:
+      tags:
+        - Carts
+      summary: post a product to a cart by its ID
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Succesfull operation
+        '404':
+          description: Cart or product not found
+
+    delete:
+      tags:
+        - Carts
+      summary: Delete a product from the cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product removed from cart
+        '404':
+          description: Cart or product not found
+
+
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        cartID:
+          type: string
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+              category:
+                type: string
+              code:
+                type: string
+              price:
+                type: number
+              cantidad:
+                type: integer
